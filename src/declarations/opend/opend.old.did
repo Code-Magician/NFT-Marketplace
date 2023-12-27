@@ -1,6 +1,7 @@
 service : {
   addToOwnersList: (principal, principal) -> () oneway;
   createNFT: (text, vec nat8) -> (principal);
+  getOpendCanisterId: () -> (principal) query;
   getOwnedNFTs: (principal) -> (vec principal) query;
   listNft: (principal, nat) -> (text);
 }
