@@ -5,6 +5,11 @@ export const idlFactory = ({ IDL }) => {
         [],
         ['oneway'],
       ),
+    'completePurchase' : IDL.Func(
+        [IDL.Principal, IDL.Principal, IDL.Principal],
+        [IDL.Text],
+        [],
+      ),
     'createNFT' : IDL.Func([IDL.Text, IDL.Vec(IDL.Nat8)], [IDL.Principal], []),
     'getNftOriginalOwner' : IDL.Func(
         [IDL.Principal],

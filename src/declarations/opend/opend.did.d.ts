@@ -3,6 +3,11 @@ export interface _SERVICE {
   'addToOwnersList' : (arg_0: Principal, arg_1: Principal) => Promise<
       undefined
     >,
+  'completePurchase' : (
+      arg_0: Principal,
+      arg_1: Principal,
+      arg_2: Principal,
+    ) => Promise<string>,
   'createNFT' : (arg_0: string, arg_1: Array<number>) => Promise<Principal>,
   'getNftOriginalOwner' : (arg_0: Principal) => Promise<Principal>,
   'getNftPrice' : (arg_0: Principal) => Promise<bigint>,

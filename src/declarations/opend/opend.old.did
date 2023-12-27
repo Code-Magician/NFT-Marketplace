@@ -2,6 +2,7 @@ service : {
   addToOwnersList: (principal, principal) -> () oneway;
   createNFT: (text, vec nat8) -> (principal);
   getNftOriginalOwner: (principal) -> (principal) query;
+  getNftPrice: (principal) -> (nat) query;
   getOpendCanisterId: () -> (principal) query;
   getOwnedNFTs: (principal) -> (vec principal) query;
   isListed: (principal) -> (bool) query;

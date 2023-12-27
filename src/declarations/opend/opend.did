@@ -1,5 +1,6 @@
 service : {
   addToOwnersList: (principal, principal) -> () oneway;
+  completePurchase: (principal, principal, principal) -> (text);
   createNFT: (text, vec nat8) -> (principal);
   getNftOriginalOwner: (principal) -> (principal) query;
   getNftPrice: (principal) -> (nat) query;
