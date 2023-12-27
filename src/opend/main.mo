@@ -6,6 +6,7 @@ import HashMap "mo:base/HashMap";
 import List "mo:base/List";
 import Text "mo:base/Text";
 import Bool "mo:base/Bool";
+import Iter "mo:base/Iter";
 
 actor OpenD {
     private type Listing = {
@@ -22,7 +23,7 @@ actor OpenD {
         let owner: Principal = msg.caller;
 
         Debug.print(debug_show(Cycles.balance()));
-        Cycles.add(100_500_000_000_000);
+        Cycles.add(100_500_000_000);
         Debug.print(debug_show(Cycles.balance()));
 
         let newNFT = await NFTActorClass.NFT(name, owner, content);
@@ -51,6 +52,10 @@ actor OpenD {
         };
 
         return List.toArray<Principal>(nftList);
+    };
+
+    public query func listingNFTs () : async [Principal] {
+        return Iter.toArray(listedNftsMap.keys());
     };
 
     public shared(msg) func listNft(id: Principal, itemPrice: Nat): async Text {
@@ -82,5 +87,23 @@ actor OpenD {
         if(listedNftsMap.get(id) == null) return false;
         
         return true;
-    }
+    };
+
+    public query func getNftOriginalOwner(id: Principal): async Principal {
+        let item: Listing = switch(listedNftsMap.get(id)) {
+            case null return Principal.fromText("");
+            case (?res) res;
+        };
+
+        return item.owner;
+    };
+
+    public query func getNftPrice(id: Principal): async Nat {
+        let item: Listing = switch(listedNftsMap.get(id)) {
+            case null return 0;
+            case (?res) res;
+        };
+
+        return item.price;
+    };
 };

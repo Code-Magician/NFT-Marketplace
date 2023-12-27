@@ -6,6 +6,12 @@ export const idlFactory = ({ IDL }) => {
         ['oneway'],
       ),
     'createNFT' : IDL.Func([IDL.Text, IDL.Vec(IDL.Nat8)], [IDL.Principal], []),
+    'getNftOriginalOwner' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Principal],
+        ['query'],
+      ),
+    'getNftPrice' : IDL.Func([IDL.Principal], [IDL.Nat], ['query']),
     'getOpendCanisterId' : IDL.Func([], [IDL.Principal], ['query']),
     'getOwnedNFTs' : IDL.Func(
         [IDL.Principal],
@@ -14,6 +20,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'isListed' : IDL.Func([IDL.Principal], [IDL.Bool], ['query']),
     'listNft' : IDL.Func([IDL.Principal, IDL.Nat], [IDL.Text], []),
+    'listingNFTs' : IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };
