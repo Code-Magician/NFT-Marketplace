@@ -4,6 +4,7 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
 import Button from './Button';
 import { opend } from "../../../declarations/opend/index";
+import Loader from "./Loader";
 
 function Item(props) {
     const [name, setName] = useState();
@@ -11,6 +12,9 @@ function Item(props) {
     const [image, setImage] = useState();
     const [button, setButton] = useState();
     const [priceInput, setPriceInput] = useState();
+    const [loaderHidden, setLoaderHidden] = useState(true);
+    const [blur, setBlur] = useState({});
+    const [listedTxt, setListedTxt] = useState("");
 
     const id = props.id;
     const localhost = "http://localhost:8080/";
@@ -35,10 +39,15 @@ function Item(props) {
             { type: "image/png" }
         );
 
+        const isListed = await opend.isListed(id);
+        console.log(nftName + " " + isListed);
+
         setName(nftName);
-        setOwner(nftOwner.toText());
+        setOwner(isListed ? "OpenD" : nftOwner.toText());
         setImage(imageURL);
-        setButton((<Button onClick={handleSell} title="Sell" />));
+        setButton(isListed ? null : (<Button onClick={handleSell} title="Sell" />));
+        setBlur(isListed? {filter: "blur(4px)"} : {});
+        setListedTxt(isListed? "Listed": "");
     }
 
     let price;
@@ -54,6 +63,8 @@ function Item(props) {
     }
 
     async function sellItem() {
+        setBlur({filter: "blur(4px)"});
+        setLoaderHidden(false);
         setPriceInput(null);
         setButton(null);
 
@@ -64,6 +75,12 @@ function Item(props) {
             const opendID = await opend.getOpendCanisterId();
             let transferOwnerResult = await NFTActor.transferOwnerShip(opendID);
             console.log(transferOwnerResult);
+
+            if(transferOwnerResult === "Success") {
+                setLoaderHidden(true);
+                setOwner("OpenD");
+                setListedTxt("Listed");
+            }
         }  
     }
 
@@ -77,14 +94,16 @@ function Item(props) {
                 <img
                     className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
                     src={image}
+                    style={blur}
                 />
                 <div className="disCardContent-root">
                     <h2 className="disTypography-root makeStyles-bodyText-24 disTypography-h5 disTypography-gutterBottom">
-                        {name}<span className="purple-text"></span>
+                        {name} <span className="purple-text">{listedTxt}</span>
                     </h2>
                     <p className="disTypography-root makeStyles-bodyText-24 disTypography-body2 disTypography-colorTextSecondary">
                         Owner: {owner}
                     </p>
+                    <Loader hidden={loaderHidden}/>
                     {priceInput}
                     {button}
                 </div>

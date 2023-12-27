@@ -5,6 +5,7 @@ import Cycles "mo:base/ExperimentalCycles";
 import HashMap "mo:base/HashMap";
 import List "mo:base/List";
 import Text "mo:base/Text";
+import Bool "mo:base/Bool";
 
 actor OpenD {
     private type Listing = {
@@ -21,7 +22,7 @@ actor OpenD {
         let owner: Principal = msg.caller;
 
         Debug.print(debug_show(Cycles.balance()));
-        Cycles.add(100_500_000_000);
+        Cycles.add(100_500_000_000_000);
         Debug.print(debug_show(Cycles.balance()));
 
         let newNFT = await NFTActorClass.NFT(name, owner, content);
@@ -75,5 +76,11 @@ actor OpenD {
 
     public query func getOpendCanisterId(): async Principal {
         return Principal.fromActor(OpenD);
+    };
+
+    public query func isListed(id: Principal): async Bool {
+        if(listedNftsMap.get(id) == null) return false;
+        
+        return true;
     }
 };

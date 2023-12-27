@@ -12,6 +12,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Principal)],
         ['query'],
       ),
+    'isListed' : IDL.Func([IDL.Principal], [IDL.Bool], ['query']),
     'listNft' : IDL.Func([IDL.Principal, IDL.Nat], [IDL.Text], []),
   });
 };
