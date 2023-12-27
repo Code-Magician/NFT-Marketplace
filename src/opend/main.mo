@@ -4,10 +4,17 @@ import NFTActorClass "../NFT/nft";
 import Cycles "mo:base/ExperimentalCycles";
 import HashMap "mo:base/HashMap";
 import List "mo:base/List";
+import Text "mo:base/Text";
 
 actor OpenD {
+    private type Listing = {
+        owner: Principal;
+        price: Nat;
+    };
+
     let nftMap = HashMap.HashMap<Principal, NFTActorClass.NFT>(1, Principal.equal, Principal.hash);
     let ownersMap = HashMap.HashMap<Principal, List.List<Principal>>(1, Principal.equal, Principal.hash);
+    let listedNftsMap = HashMap.HashMap<Principal, Listing>(1, Principal.equal, Principal.hash);
 
 
     public shared(msg) func createNFT(name: Text, content: [Nat8]): async Principal {
@@ -43,5 +50,30 @@ actor OpenD {
         };
 
         return List.toArray<Principal>(nftList);
+    };
+
+    public shared(msg) func listNft(id: Principal, itemPrice: Nat): async Text {
+        let listedNft: NFTActorClass.NFT = switch(nftMap.get(id)) {
+            case null return "NFT does not exist.";
+            case (?res) res;
+        }; 
+
+        let itemOwner = await listedNft.getOwner();
+        if(Principal.equal(itemOwner, msg.caller)){
+            let item: Listing = {
+                owner = itemOwner;
+                price = itemPrice;
+            };
+
+            listedNftsMap.put(id, item);
+            return "Success";
+        }
+        else {
+            return "Yout don't own the NFT.";
+        }
+    };
+
+    public query func getOpendCanisterId(): async Principal {
+        return Principal.fromActor(OpenD);
     }
 };
