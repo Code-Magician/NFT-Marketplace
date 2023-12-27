@@ -9,7 +9,7 @@ function Item(props) {
 	const [image, setImage] = useState();
 
 	async function loadNFT() {
-		const id = Principal.fromText(props.id);
+		const id = props.id;
 		const localhost = "http://localhost:8080/";
 		const agent = new HttpAgent({host: localhost});
 

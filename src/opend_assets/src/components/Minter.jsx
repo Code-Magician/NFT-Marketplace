@@ -64,7 +64,7 @@ function Minter() {
 						</div>
 					</div>
 					<div className="form-ButtonBase-root form-Chip-root makeStyles-chipBlue-108 form-Chip-clickable">
-						<span onClick={handleSubmit(onSubmit)} className="form-Chip-label">Mint NFT</span>
+						<button disabled={!loaderHidden} onClick={handleSubmit(onSubmit)} className="form-Chip-label">Mint NFT</button>
 					</div>
 				</form>
 			</div>
